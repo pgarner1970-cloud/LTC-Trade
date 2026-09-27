@@ -1,0 +1,19 @@
+p.noteBlue
+{
+     background-color: #f0f7fb;
+     border-left: solid 4px #3498db;
+     line-height: 18px;
+     mc-auto-number-format: '{b}Note: {/b}';
+     overflow: hidden;
+     padding: 12px;
+}
+
+p.noteGreen
+{
+     background-color: #e6ffe6;
+     border-left: solid 4px #33cc33;
+     line-height: 18px;
+     mc-auto-number-format: '{b}Note: {/b}';
+     overflow: hidden;
+     padding: 12px;
+}

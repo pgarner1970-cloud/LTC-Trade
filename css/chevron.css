@@ -1,0 +1,16 @@
+.toggle-icon.chevron {
+  display: inline-block;
+  width: 18px;
+  text-align: center;
+  font-size: 13px;
+  color: #0d6efd; /* Bootstrap primary */
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.order-row:hover .toggle-icon.chevron {
+  color: #084298;
+}
+
+.toggle-icon.chevron.open {
+  transform: rotate(90deg);
+}

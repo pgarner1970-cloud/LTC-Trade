@@ -1,0 +1,6 @@
+<?php
+//$conn = new mysqli("localhost", "tyres4sale", "5madFish!", "tyres4sale", "3306");
+$conn = new mysqli("sdb-65.hosting.stackcp.net", "tyres4sale-35303339872b", "5madFish!", "tyres4sale-35303339872b");
+if($conn->connect_error) {
+	die("Could not connect to MySQL Server: " . $conn->connect_error);
+}
