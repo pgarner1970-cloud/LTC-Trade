@@ -3,9 +3,9 @@ session_start();
 require_once 'db.php';
 header('Content-type: application/json');
 
-$sql = "SELECT b.*, t.Manufacturer
+$sql = "SELECT b.*, COALESCE(t.Manufacturer, '') AS Manufacturer
         FROM tblbasket b
-        INNER JOIN tbltyredata t
+        LEFT JOIN tbltyredata t
           ON b.EAN = t.EAN AND b.Supplier = t.Supplier
         WHERE b.basket_id = ?";
 
@@ -23,6 +23,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
   $results_arr[] = $row['Quantity'];
   $results_arr[] = $row['UnitSellPrice'];
   $results_arr[] = $row['Manufacturer'];
+  $results_arr[] = $row['Supplier'];
   $data[] = $results_arr;
 }
 

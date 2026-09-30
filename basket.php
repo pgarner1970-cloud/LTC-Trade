@@ -25,8 +25,17 @@ if (isset($_SESSION['username'])) {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/toastr.min.js"></script>
-    <script src="js/basket.js"></script>
-</head>
+    <script src="js/basket.js?v=20260930-mobile2"></script>
+<style>
+.basket-card{border:1px solid #dce2e8;border-radius:.7rem;padding:1rem;margin-bottom:.75rem}
+.basket-price{color:#1558b0;font-weight:700;font-size:1.3rem}
+.basket-qty{display:inline-flex;align-items:center;border:1px solid #cbd5e1;border-radius:.4rem;overflow:hidden}
+.basket-qty button{border:0;background:white;padding:.35rem .75rem;min-height:38px}
+.basket-qty span{min-width:2.5rem;text-align:center;font-weight:600}
+.basket-summary{max-width:460px;margin-left:auto}
+@media(max-width:767.98px){.basket-desktop{display:none!important}}
+@media(min-width:768px){.basket-mobile{display:none!important}}
+</style></head>
 
 <body>
 

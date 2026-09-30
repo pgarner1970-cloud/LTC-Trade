@@ -1,127 +1,26 @@
-$(document).ready(function(){
-	$("#wrapper").toggleClass("toggled");
-	$("#resultsDiv").empty();
-	$.ajax({
-		url: 'functions/baskettable.php',
-		type: 'post',
-		dataType: 'json',
-		success:function(data) {
-
-				// log data to the console so we can see
-				console.log(data); 
-				var len = data.length;
-				console.log(len);
-				var subtot=0;
-				
-				$("#resultsDiv").empty();
-				var resultsHtml = "<table cellspacing=2 cellpadding=2 class='table table-striped'>";
-				resultsHtml += '<thead><tr bgcolor=#cecece><td>EAN</td><td>Manufacturer</td><td>Description</td><td>Price</td><td>Qty</td><td>Action</td><td>Extended</td></tr></thead>';
-				for(var i = 0; i<len; i++) {
-					resultsHtml += '<tr><td width=15%>' + data[i][0] + '</td>';
-					resultsHtml += '<td width=15%>' + data[i][6] + '</td>';
-					resultsHtml += '<td width=40%>' + data[i][2] + '</td>';
-					resultsHtml += '<td width=5%>' + data[i][3] + '</td>';
-    				resultsHtml += '<td width=5%>' + data[i][4] + '</td>';
-					resultsHtml += '<td><button type="button" name="update" id="' + data[i][0] + '" class="btn btn-info btn-sm update">Update</button>';
-					resultsHtml += ' <button type="button" name="delete" id="' + data[i][0] + '" class="btn btn-danger btn-sm delete">Delete</button></td>';
-					resultsHtml += '<td width=5% align=right>' + (data[i][3] * data[i][4]).toFixed(2) + '</td></tr>';
-					subtot = subtot + (data[i][3] * data[i][4]);
-				} 
-				resultsHtml += '<tr><td colspan=6 align=right><strong>Sub-total (excl.VAT)</strong></td><td align=right><strong>' + subtot.toFixed(2) + '</strong></th></tr>';
-				resultsHtml += '<tr><td colspan=6 align=right><strong>VAT</strong></td><td align=right><strong>' + (subtot * 0.2).toFixed(2) + '</strong></th></tr>';
-				resultsHtml += '<tr><td colspan=6 align=right bgcolor=#cecece><strong>Total (incl.VAT)</strong></td><td align=right><strong>' + (subtot * 1.2).toFixed(2) + '</strong></th></tr>';
-				resultsHtml += "</table>";
-				resultsHtml += "<table width='100%' cellspacing=2 cellpadding=2><tr><td><button type='button' name='deleteall' id='deleteall' class='btn btn-danger btn-s deleteall'>Delete Basket</button></td>"
-				if (subtot > 0) {
-				    resultsHtml += "<td align=right><button type='button' name='checkout' id='checkout' class='btn btn-info btn-s checkout'>Checkout</button></td></tr></table>"
-				} else {
-				    resultsHtml += "<td align=right><button type='button' name='checkout' id='checkout' class='btn btn-info btn-s checkout' disabled>Checkout</button></td></tr></table>"
-				}
-				$("#resultsDiv").html(resultsHtml);
-			}
-		});
-		
-		$(document).on('click', '.deleteall', function(){
-		    if (confirm("Are you sure you want to delete the basket?")) {
-		    	$.ajax({
-		    	url:"functions/basketdeleteall.php",
-		    	method:"POST",
-		    	success:function(data) {
-		    		location.reload();
-		    		}
-		    	});		
-		    }
-		    else {
-			    return false;
-		    }
-	    });
-	    
-		$(document).on('click', '.delete', function(){
-		    var id = $(this).attr("id");
-		    if (confirm("Are you sure you want to delete this?")) {
-		    	$.ajax({
-		    	url:"functions/basketdeletesingle.php",
-		    	method:"POST",
-		    	data:{id:id},
-		    	success:function(data) {
-		    		location.reload();
-		    		}
-		    	});		
-		    }
-		    else {
-			    return false;
-		    }
-	    });
-	    
-		$(document).on('click', '.checkout', function(){
-	    	$("#checkout").attr("disabled", true);
-    		window.location.href = 'checkout.php';
-	    });
-	    
-		$(document).on('submit', '#basket_form', function(event){
-     		event.preventDefault();
-    		var regex = /^[0-9]*$/i;
-    		var quantity = $('#quantity').val();
-    		if (quantity.match(regex) == null) {
-    			alert("Quantity can be integer numbers only ie. 10");
-    			return false;
-    		}
-    		if(quantity != '') {
-    			$.ajax({
-    				url: "functions/basketfunctions.php",
-    				method: "POST",
-    				data: new FormData(this),
-    				contentType:false,
-    				processData:false,
-    				success:function(data) {
-    					//alert(data);
-    					$('#basket_form')[0].reset();
-    					$('#basketModal').modal('hide');
-    					location.reload();
-    				}
-    			});
-    		}
-    		else {
-    			alert("All fields are required");
-    		}
-    	});
-    	
-    	$(document).on('click', '.update', function(){
-    		var id = $(this).attr("id");
-    		$.ajax({
-    			url:"functions/basketfetchsingle.php",
-    			method:"POST",
-    			data:{id:id},
-    			dataType:"json",
-    			success:function(data) {
-    				$('#basketModal').modal('show');
-    				$('#quantity').val(data.quantity);
-    				$('#tyredesc').val(data.tyredesc);
-    				$('.modal-title').text(data.tyredesc);
-    				$('#basket_id').val(id);
-    				$('#action').val("Edit");
-    				$('#operation').val("Edit");
-    			}
-    		});
-    	});    
-	});
+$(function(){
+function esc(x){return String(x==null?'':x).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function money(x){return '£'+Number(x||0).toFixed(2);}
+function err(x){if(window.toastr)toastr.error(x);else alert(x);}
+function controls(r){return '<div class="basket-qty" data-ean="'+esc(r[0])+'" data-supplier="'+esc(r[7])+'"><button class="qty-minus" type="button" aria-label="Decrease quantity">−</button><span>'+esc(r[4])+'</span><button class="qty-plus" type="button" aria-label="Increase quantity">+</button></div>';}
+function remove(r){return '<button type="button" class="btn btn-outline-danger btn-sm remove-line" data-ean="'+esc(r[0])+'" data-supplier="'+esc(r[7])+'">Remove</button>';}
+function load(){
+$.ajax({url:'functions/baskettable.php',method:'POST',dataType:'json'}).done(function(rows){
+if(!Array.isArray(rows)){err('Basket response invalid.');return;}
+var sub=0,desktop='<div class="basket-desktop table-responsive"><table class="table table-striped align-middle"><thead><tr><th>Manufacturer</th><th>Description</th><th>Unit price (exc VAT)</th><th>Qty</th><th>Line total</th><th></th></tr></thead><tbody>',mobile='<div class="basket-mobile">';
+rows.forEach(function(r){var price=Number(r[3]),qty=Number(r[4]);sub+=price*qty;
+desktop+='<tr><td class="fw-bold">'+esc(r[6])+'</td><td>'+esc(r[2])+'</td><td>'+money(price)+'</td><td>'+controls(r)+'</td><td>'+money(price*qty)+'</td><td>'+remove(r)+'</td></tr>';
+mobile+='<article class="basket-card"><strong>'+esc(r[6])+'</strong><div class="mb-3">'+esc(r[2])+'</div><div class="d-flex justify-content-between align-items-center gap-2 flex-wrap"><div><small class="text-muted">Unit price (exc VAT)</small><div class="basket-price">'+money(price)+'</div></div>'+controls(r)+'</div><div class="d-flex justify-content-between mt-3"><span>Line total</span><strong>'+money(price*qty)+'</strong></div><div class="mt-3">'+remove(r)+'</div></article>';
+});
+desktop+='</tbody></table></div>';mobile+='</div>';
+var totals='<div class="basket-summary border-top pt-3"><div class="d-flex justify-content-between"><span>Subtotal (exc VAT)</span><strong>'+money(sub)+'</strong></div><div class="d-flex justify-content-between"><span>VAT (20%)</span><strong>'+money(sub*.2)+'</strong></div><div class="d-flex justify-content-between fs-5 mt-2"><strong>Total (inc VAT)</strong><strong>'+money(sub*1.2)+'</strong></div></div>';
+var actions='<div class="d-flex justify-content-between flex-wrap gap-2 mt-4"><button class="btn btn-outline-danger deleteall">Delete basket</button><button class="btn btn-primary checkout">Proceed to checkout</button></div>';
+$('#resultsDiv').html(rows.length?desktop+mobile+totals+actions:'<div class="alert alert-info">Your basket is empty.</div><a class="btn btn-primary" href="stock-multi.php">Search tyres</a>');
+}).fail(function(){err('Could not load basket.');});
+}
+$(document).on('click','.qty-plus,.qty-minus',function(){var c=$(this).closest('.basket-qty'),q=Number(c.find('span').text())+($(this).hasClass('qty-plus')?1:-1);if(q<1||q>99){err('Quantity must be between 1 and 99.');return;}$.ajax({url:'functions/basketfunctions.php',method:'POST',data:{operation:'Edit',basket_id:c.attr('data-ean'),supplier:c.attr('data-supplier'),quantity:q}}).done(function(t){if(String(t).startsWith('Error:'))err(t);else load();}).fail(function(x){err(x.responseText||'Unable to update quantity.');});});
+$(document).on('click','.remove-line',function(){if(!confirm('Remove this tyre offer?'))return;$.ajax({url:'functions/basketdeletesingle.php',method:'POST',data:{id:$(this).attr('data-ean'),supplier:$(this).attr('data-supplier')}}).done(function(t){if(String(t).startsWith('Error:'))err(t);else load();}).fail(function(x){err(x.responseText||'Unable to remove tyre.');});});
+$(document).on('click','.deleteall',function(){if(confirm('Delete the entire basket?'))$.post('functions/basketdeleteall.php').done(load).fail(function(){err('Unable to clear basket.');});});
+$(document).on('click','.checkout',function(){location.href='checkout.php';});
+load();
+});
