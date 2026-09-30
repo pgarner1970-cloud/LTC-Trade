@@ -27,8 +27,12 @@ if (isset($_SESSION['username'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.2.2/datatables.min.js" integrity="sha384-WcZXtPeSp12Ybwm08R/IL8F3bMhrj0WW6jKsqKXTqJSwCSkISe4unYVY8Vzc1RZc" crossorigin="anonymous"></script>
     <script src="js/toastr.min.js"></script>
-    <script src="js/stock_multi.js?v=20260930-2"></script>
+    <script src="js/stock_multi.js?v=20260930-4"></script>
     <style>
+      .offer-actions { display:inline-flex; gap:.35rem; align-items:center; }
+      .offer-qty { width:3.3rem; min-width:3.3rem; padding:.2rem; text-align:center; }
+      .stock-mobile-card .stock-card-offer { flex-wrap:wrap; }
+      .extra-filter-row { background:#f7f9fc; padding:.65rem; border-radius:.5rem; margin-top:.5rem; }
       .multi-stock-table thead th { white-space: nowrap; background: #f1f3f5; }
       .multi-stock-table.table > :not(caption) > * > * { padding: .18rem .42rem; font-size: .88rem; line-height: 1.2; }
       .multi-stock-table .tyre-manufacturer { font-weight: 700; }
@@ -79,7 +83,7 @@ if (isset($_SESSION['username'])) {
         <div id="page-content-wrapper">
 
             <div class="container-fluid">
-                <h3>Tyre Search <small class="text-muted fs-6">Multi-stock preview · layout v3</small></h3>
+                <h3>Tyre Search <small class="text-muted fs-6">Multi-stock preview · layout v4</small></h3>
 				<form name="search" id="search" class="row gy-2 gx-3 align-items-center">
 
                     <!-- NEW: Quick tyre size input -->
@@ -127,6 +131,13 @@ if (isset($_SESSION['username'])) {
 						<option value="ABCDEF">A > F</option>
 						</select></div></div>
 					<div class="col-auto"><button type="submit" class="btn btn-primary">Submit</button></div>
+                    <div class="extra-filter-row row g-2 align-items-end">
+                      <div class="col-6 col-md-2"><label for="season-filter" class="form-label small">Season</label><select id="season-filter" class="form-select form-select-sm"><option value="all">All</option><option value="summer">Summer</option><option value="winter">Winter</option><option value="allseason">All-season</option></select></div>
+                      <div class="col-6 col-md-2"><label for="runflat-filter" class="form-label small">Runflat</label><select id="runflat-filter" class="form-select form-select-sm"><option value="any">Any</option><option value="yes">Yes</option><option value="no">No</option></select></div>
+                      <div class="col-6 col-md-2"><label for="availability-filter" class="form-label small">Delivery</label><select id="availability-filter" class="form-select form-select-sm"><option value="all">All deliveries</option><option value="today">Today only</option></select></div>
+                      <div class="col-6 col-md-3"><label for="sort-results" class="form-label small">Sort</label><select id="sort-results" class="form-select form-select-sm"><option value="price">Lowest price</option><option value="price-desc">Highest price</option><option value="delivery">Earliest delivery</option><option value="brand">Brand A–Z</option></select></div>
+                      <div class="col-12 col-md-3"><button type="button" id="reset-extra-filters" class="btn btn-outline-secondary btn-sm w-100">Reset additional filters</button></div>
+                    </div>
 				</form>
 	  			<div id="resultsDiv"></div>
             </div>
