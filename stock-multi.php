@@ -27,7 +27,7 @@ if (isset($_SESSION['username'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.2.2/datatables.min.js" integrity="sha384-WcZXtPeSp12Ybwm08R/IL8F3bMhrj0WW6jKsqKXTqJSwCSkISe4unYVY8Vzc1RZc" crossorigin="anonymous"></script>
     <script src="js/toastr.min.js"></script>
-    <script src="js/stock_multi.js"></script>
+    <script src="js/stock_multi.js?v=20260930-2"></script>
     <style>
       .multi-stock-table thead th { white-space: nowrap; background: #f1f3f5; }
       .multi-stock-table td, .multi-stock-table th { padding: .34rem .42rem; font-size: .88rem; }
@@ -79,7 +79,7 @@ if (isset($_SESSION['username'])) {
         <div id="page-content-wrapper">
 
             <div class="container-fluid">
-                <h3>Tyre Search <small class="text-muted fs-6">Multi-stock preview</small></h3>
+                <h3>Tyre Search <small class="text-muted fs-6">Multi-stock preview · layout v2</small></h3>
 				<form name="search" id="search" class="row gy-2 gx-3 align-items-center">
 
                     <!-- NEW: Quick tyre size input -->
