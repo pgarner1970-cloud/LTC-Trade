@@ -27,12 +27,22 @@ if (isset($_SESSION['username'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.2.2/datatables.min.js" integrity="sha384-WcZXtPeSp12Ybwm08R/IL8F3bMhrj0WW6jKsqKXTqJSwCSkISe4unYVY8Vzc1RZc" crossorigin="anonymous"></script>
     <script src="js/toastr.min.js"></script>
-    <script src="js/stock_multi.js?v=20260930-4"></script>
+    <script src="js/stock_multi.js?v=20260930-5"></script>
     <style>
       .offer-actions { display:inline-flex; gap:.35rem; align-items:center; }
       .offer-qty { width:3.3rem; min-width:3.3rem; padding:.2rem; text-align:center; }
       .stock-mobile-card .stock-card-offer { flex-wrap:wrap; }
       .extra-filter-row { background:#f7f9fc; padding:.65rem; border-radius:.5rem; margin-top:.5rem; }
+      .offer-actions { display:inline-flex; gap:.4rem; align-items:center; white-space:nowrap; }
+      .qty-stepper { display:inline-flex; align-items:stretch; height:30px; border:1px solid #ced4da; border-radius:.4rem; overflow:hidden; background:#fff; }
+      .qty-stepper button { border:0; background:#f8f9fa; color:#173a65; min-width:29px; padding:0 .35rem; font-weight:700; font-size:1rem; cursor:pointer; }
+      .qty-stepper button:first-child { border-right:1px solid #ced4da; }
+      .qty-stepper button:last-child { border-left:1px solid #ced4da; }
+      .qty-stepper button:focus-visible { outline:2px solid #0d6efd; outline-offset:-2px; }
+      .qty-stepper .offer-qty { width:36px; min-width:36px; border:0; border-radius:0; text-align:center; padding:0 2px; font-size:.84rem; appearance:textfield; -moz-appearance:textfield; }
+      .qty-stepper .offer-qty::-webkit-inner-spin-button, .qty-stepper .offer-qty::-webkit-outer-spin-button { -webkit-appearance:none; margin:0; }
+      .stock-mobile-card .qty-stepper { height:36px; }
+      .stock-mobile-card .qty-stepper button { min-width:34px; }
       .multi-stock-table thead th { white-space: nowrap; background: #f1f3f5; }
       .multi-stock-table.table > :not(caption) > * > * { padding: .18rem .42rem; font-size: .88rem; line-height: 1.2; }
       .multi-stock-table .tyre-manufacturer { font-weight: 700; }

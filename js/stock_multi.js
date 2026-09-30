@@ -464,7 +464,7 @@ $(document).ready(function () {
                 html += " <span class='badge text-bg-success'>Earliest</span>";
               }
               html += "</td>";
-              html += "<td><span class='offer-actions'><input class='form-control form-control-sm offer-qty' type='number' min='1' max='99' value='2' aria-label='Quantity'><button type='button' data-offer='" + escapeAttr(product.EAN + "~" + offer.Supplier) + "' class='btn btn-info btn-sm buy'>Add</button></span></td>";
+              html += "<td><span class='offer-actions'><span class='qty-stepper'><button type='button' class='qty-minus' aria-label='Decrease quantity'>−</button><input class='offer-qty' type='number' min='1' max='99' value='2' aria-label='Quantity'><button type='button' class='qty-plus' aria-label='Increase quantity'>+</button></span><button type='button' data-offer='" + escapeAttr(product.EAN + "~" + offer.Supplier) + "' class='btn btn-info btn-sm buy'>Add</button></span></td>";
               html += "</tr>";
             });
             mobileHtml += "<article class='stock-mobile-card'>";
@@ -476,7 +476,7 @@ $(document).ready(function () {
               mobileHtml += "<div class='stock-card-offer'><div><div class='stock-card-price'>£" + escapeHtml(offer.UnitTrade) + " <small class='text-muted fw-normal'>exc VAT</small></div>";
               mobileHtml += "<div class='stock-card-delivery'>" + escapeHtml(offer.DeliveryLabel);
               if (isEarliest) mobileHtml += " <span class='badge text-bg-success'>Earliest</span>";
-              mobileHtml += "</div></div><span class='offer-actions'><input class='form-control form-control-sm offer-qty' type='number' min='1' max='99' value='2' aria-label='Quantity'><button type='button' data-offer='" + escapeAttr(product.EAN + "~" + offer.Supplier) + "' class='btn btn-info btn-sm buy'>Add</button></span></div>";
+              mobileHtml += "</div></div><span class='offer-actions'><span class='qty-stepper'><button type='button' class='qty-minus' aria-label='Decrease quantity'>−</button><input class='offer-qty' type='number' min='1' max='99' value='2' aria-label='Quantity'><button type='button' class='qty-plus' aria-label='Increase quantity'>+</button></span><button type='button' data-offer='" + escapeAttr(product.EAN + "~" + offer.Supplier) + "' class='btn btn-info btn-sm buy'>Add</button></span></div>";
             });
             mobileHtml += "</article>";
             rendered++;
@@ -502,6 +502,21 @@ $(document).ready(function () {
             "</div>"
         );
       });
+  });
+
+  // Quantity stepper works for both dynamically rendered desktop and mobile offers.
+  $(document).on("click", ".qty-minus, .qty-plus", function () {
+    var $input = $(this).closest(".qty-stepper").find(".offer-qty");
+    var current = Number.parseInt($input.val(), 10);
+    if (!Number.isFinite(current)) current = 2;
+    var delta = $(this).hasClass("qty-plus") ? 1 : -1;
+    $input.val(Math.max(1, Math.min(99, current + delta)));
+  });
+
+  $(document).on("change blur", ".offer-qty", function () {
+    var quantity = Number.parseInt($(this).val(), 10);
+    if (!Number.isFinite(quantity)) quantity = 1;
+    $(this).val(Math.max(1, Math.min(99, quantity)));
   });
 
   // -----------------------------
