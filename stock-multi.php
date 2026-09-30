@@ -27,7 +27,7 @@ if (isset($_SESSION['username'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.2.2/datatables.min.js" integrity="sha384-WcZXtPeSp12Ybwm08R/IL8F3bMhrj0WW6jKsqKXTqJSwCSkISe4unYVY8Vzc1RZc" crossorigin="anonymous"></script>
     <script src="js/toastr.min.js"></script>
-    <script src="js/stock_multi.js?v=20260930-5"></script>
+    <script src="js/stock_multi.js?v=20260930-6"></script>
     <style>
       .offer-actions { display:inline-flex; gap:.35rem; align-items:center; }
       .offer-qty { width:3.3rem; min-width:3.3rem; padding:.2rem; text-align:center; }
@@ -79,6 +79,25 @@ if (isset($_SESSION['username'])) {
       .multi-stock-table .delivery-cell { white-space: nowrap; }
       .multi-stock-table .tyre-description { min-width: 310px; }
       .multi-stock-table .badge { font-size: .68rem; vertical-align: middle; }
+    
+      /* Clear price and delivery hierarchy, on desktop and mobile. */
+      .multi-stock-table .trade-price,
+      .stock-mobile-card .stock-card-price {
+        color: #1558b0;
+        font-weight: 750;
+        font-variant-numeric: tabular-nums;
+      }
+      .stock-mobile-card .stock-card-price { font-size: 1.23rem; line-height: 1.2; }
+      .stock-mobile-card .stock-card-price small { font-size: .7rem; color: #6b7280 !important; }
+      .multi-stock-table .delivery-cell .delivery-label,
+      .stock-mobile-card .stock-card-delivery {
+        font-weight: 650;
+        color: #237844;
+      }
+      .multi-stock-table .delivery-cell .delivery-label.delivery-later,
+      .stock-mobile-card .stock-card-delivery.delivery-later {
+        color: #586576;
+      }
     </style>
 </head>
 
