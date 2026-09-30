@@ -30,9 +30,9 @@ if (isset($_SESSION['username'])) {
     <script src="js/stock_multi.js?v=20260930-2"></script>
     <style>
       .multi-stock-table thead th { white-space: nowrap; background: #f1f3f5; }
-      .multi-stock-table td, .multi-stock-table th { padding: .34rem .42rem; font-size: .88rem; }
+      .multi-stock-table.table > :not(caption) > * > * { padding: .18rem .42rem; font-size: .88rem; line-height: 1.2; }
       .multi-stock-table .tyre-manufacturer { font-weight: 700; }
-      .multi-stock-table .btn.buy { padding: .22rem .48rem; }
+      .multi-stock-table .btn.buy { padding: .12rem .38rem; font-size: .76rem; line-height: 1.15; min-height: 24px; }
       .multi-stock-table { margin-bottom: 0; }
       .stock-mobile-list { display: none; }
       .stock-mobile-card { border: 1px solid #dce2e8; border-radius: .7rem; margin-bottom: .7rem; padding: .85rem; }
@@ -79,7 +79,7 @@ if (isset($_SESSION['username'])) {
         <div id="page-content-wrapper">
 
             <div class="container-fluid">
-                <h3>Tyre Search <small class="text-muted fs-6">Multi-stock preview · layout v2</small></h3>
+                <h3>Tyre Search <small class="text-muted fs-6">Multi-stock preview · layout v3</small></h3>
 				<form name="search" id="search" class="row gy-2 gx-3 align-items-center">
 
                     <!-- NEW: Quick tyre size input -->
