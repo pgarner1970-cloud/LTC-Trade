@@ -364,8 +364,9 @@ $(document).ready(function () {
             byEan[key].push(offer);
           });
 
-          var html = "<div class='table-responsive mt-3'><table class='table table-sm align-middle multi-stock-table'>";
-          html += "<thead><tr><th>EAN</th><th>Manufacturer</th><th>Description</th><th>Class</th><th>Fuel</th><th>Wet</th><th>Noise</th><th>Trade (exc VAT)</th><th>Delivery</th><th></th></tr></thead><tbody>";
+          var html = "<div class='table-responsive mt-3 multi-stock-desktop'><table class='table table-sm align-middle multi-stock-table'>";
+          var mobileHtml = "<div class='stock-mobile-list'>";
+          html += "<thead><tr><th>Manufacturer</th><th>Description</th><th>Class</th><th>Fuel</th><th>Wet</th><th>Noise</th><th>Trade (exc VAT)</th><th>Delivery</th><th></th></tr></thead><tbody>";
           var rendered = 0;
 
           products.forEach(function (product, productIndex) {
@@ -387,8 +388,7 @@ $(document).ready(function () {
               html += "<tr class='" + groupClass + (offerIndex > 0 ? " stock-offer-extra" : "") + "'>";
 
               if (offerIndex === 0) {
-                html += "<td rowspan='" + rowspan + "'>" + escapeHtml(product.EAN) + "</td>";
-                html += "<td rowspan='" + rowspan + "'>" + escapeHtml(product.Manufacturer) + "</td>";
+                html += "<td rowspan='" + rowspan + "' class='tyre-manufacturer'>" + escapeHtml(product.Manufacturer) + "</td>";
                 html += "<td rowspan='" + rowspan + "' class='tyre-description'>" + escapeHtml(product.TyreDesc) + "</td>";
                 html += "<td rowspan='" + rowspan + "'>" + escapeHtml(product.LTCClass) + "</td>";
                 html += "<td rowspan='" + rowspan + "'>" + escapeHtml(product.RollingRes) + "</td>";
@@ -405,15 +405,28 @@ $(document).ready(function () {
               html += "<td><button type='button' id='" + escapeAttr(product.EAN + "~" + offer.Supplier) + "' class='btn btn-info btn-sm buy'>Buy</button></td>";
               html += "</tr>";
             });
+            mobileHtml += "<article class='stock-mobile-card'>";
+            mobileHtml += "<div class='d-flex justify-content-between align-items-center gap-2'><span class='stock-card-manufacturer'>" + escapeHtml(product.Manufacturer) + "</span><span class='badge text-bg-light'>" + escapeHtml(product.LTCClass) + "</span></div>";
+            mobileHtml += "<div class='stock-card-description'>" + escapeHtml(product.TyreDesc) + "</div>";
+            mobileHtml += "<div class='stock-card-labels'><span>Fuel: " + escapeHtml(product.RollingRes) + "</span><span>Wet: " + escapeHtml(product.WetGrip) + "</span><span>Noise: " + escapeHtml(product.NoisePerf) + " dB</span></div>";
+            list.forEach(function (offer) {
+              var isEarliest = offer.DeliveryDate === earliest && list.some(function (x) { return x.DeliveryDate !== earliest; });
+              mobileHtml += "<div class='stock-card-offer'><div><div class='stock-card-price'>£" + escapeHtml(offer.UnitTrade) + " <small class='text-muted fw-normal'>exc VAT</small></div>";
+              mobileHtml += "<div class='stock-card-delivery'>" + escapeHtml(offer.DeliveryLabel);
+              if (isEarliest) mobileHtml += " <span class='badge text-bg-success'>Earliest</span>";
+              mobileHtml += "</div></div><button type='button' id='" + escapeAttr(product.EAN + "~" + offer.Supplier) + "' class='btn btn-info btn-sm buy'>Buy</button></div>";
+            });
+            mobileHtml += "</article>";
             rendered++;
           });
 
           html += "</tbody></table></div>";
+          mobileHtml += "</div>";
 
           if (!rendered) {
             html = "<div class='alert alert-warning mt-3'><strong>No Trade stock is currently available for these tyres.</strong></div>";
           }
-          $("#resultsDiv").html(html);
+          $("#resultsDiv").html(rendered ? html + mobileHtml : html);
         }).fail(function (xhr) {
           var message = (xhr.responseJSON && xhr.responseJSON.error) ? xhr.responseJSON.error : "Unable to load supplier offers.";
           $("#resultsDiv").html("<div class='alert alert-danger mt-3'>" + escapeHtml(message) + "</div>");

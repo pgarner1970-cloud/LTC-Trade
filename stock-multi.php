@@ -30,7 +30,34 @@ if (isset($_SESSION['username'])) {
     <script src="js/stock_multi.js"></script>
     <style>
       .multi-stock-table thead th { white-space: nowrap; background: #f1f3f5; }
-      .multi-stock-table td, .multi-stock-table th { padding: .55rem .5rem; }
+      .multi-stock-table td, .multi-stock-table th { padding: .34rem .42rem; font-size: .88rem; }
+      .multi-stock-table .tyre-manufacturer { font-weight: 700; }
+      .multi-stock-table .btn.buy { padding: .22rem .48rem; }
+      .multi-stock-table { margin-bottom: 0; }
+      .stock-mobile-list { display: none; }
+      .stock-mobile-card { border: 1px solid #dce2e8; border-radius: .7rem; margin-bottom: .7rem; padding: .85rem; }
+      .stock-mobile-card:nth-child(odd) { background: #f5f7f9; }
+      .stock-mobile-card:nth-child(even) { background: #fff; }
+      .stock-mobile-card .stock-card-manufacturer { font-size: .9rem; font-weight: 700; }
+      .stock-mobile-card .stock-card-description { font-size: .92rem; margin: .25rem 0 .45rem; }
+      .stock-mobile-card .stock-card-labels { font-size: .78rem; color: #56616b; display: flex; flex-wrap: wrap; gap: .3rem .8rem; }
+      .stock-mobile-card .stock-card-offer { display: flex; justify-content: space-between; align-items: center; gap: .6rem; padding: .6rem 0; border-top: 1px solid #e0e5ea; }
+      .stock-mobile-card .stock-card-offer:first-child { margin-top: .6rem; }
+      .stock-mobile-card .stock-card-price { font-weight: 700; }
+      .stock-mobile-card .stock-card-delivery { font-size: .84rem; }
+      @media (max-width: 899.98px) {
+        .multi-stock-desktop { display: none; }
+        .stock-mobile-list { display: block; margin-top: .8rem; }
+        #search > .col-auto { max-width: 100%; }
+        #search .input-group { flex-wrap: nowrap; }
+        #search .form-control { min-width: 0; }
+      }
+      @media (max-width: 575.98px) {
+        #search { --bs-gutter-x: .5rem; }
+        #search > .col-auto { flex: 1 1 auto; }
+        #search > .col-auto:first-child { flex-basis: 100%; }
+        #tyresize { width: 100% !important; }
+      }
       .multi-stock-table .stock-group-even > td { background-color: #f2f2f2; }
       .multi-stock-table .stock-group-odd > td { background-color: #fff; }
       .multi-stock-table .stock-offer-extra > td { border-top: 1px dashed #d5d9dd; }
