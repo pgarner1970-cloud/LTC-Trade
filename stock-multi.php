@@ -83,7 +83,7 @@ if (isset($_SESSION['username'])) {
         <div id="page-content-wrapper">
 
             <div class="container-fluid">
-                <h3>Tyre Search <small class="text-muted fs-6">Multi-stock preview · layout v4</small></h3>
+                <h3>Tyre Search</h3>
 				<form name="search" id="search" class="row gy-2 gx-3 align-items-center">
 
                     <!-- NEW: Quick tyre size input -->

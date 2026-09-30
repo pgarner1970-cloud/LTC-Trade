@@ -35,7 +35,7 @@ $basketTotalText = number_format($basketTotal, 2);
     <a class="navbar-brand" href="index.php">LTC Tyres</a>
     <ul class="navbar-nav me-auto">
       <li class="nav-item">
-        <a class="nav-link" href="stock.php">Tyre Search</a>
+        <a class="nav-link" href="stock-multi.php">Tyre Search</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="basket.php">
