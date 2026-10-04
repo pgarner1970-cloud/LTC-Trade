@@ -1,4 +1,20 @@
 <?php
+$ltcShowMultipleOffers = false;
+$ltcMultipleOffersRaw = getenv('TRADE_SHOW_MULTIPLE_OFFERS');
+if ($ltcMultipleOffersRaw === false) {
+    $ltcEnvFile = __DIR__ . '/.env';
+    if (is_readable($ltcEnvFile)) {
+        $ltcEnv = parse_ini_file($ltcEnvFile, false, INI_SCANNER_RAW);
+        if (is_array($ltcEnv) && array_key_exists('TRADE_SHOW_MULTIPLE_OFFERS', $ltcEnv)) {
+            $ltcMultipleOffersRaw = $ltcEnv['TRADE_SHOW_MULTIPLE_OFFERS'];
+        }
+    }
+}
+if ($ltcMultipleOffersRaw !== false) {
+    $ltcShowMultipleOffers = in_array(strtolower(trim((string)$ltcMultipleOffersRaw)), ['1','true','yes','on'], true);
+}
+?>
+<?php
 session_start();
 if (isset($_SESSION['username'])) {
 
@@ -27,7 +43,8 @@ if (isset($_SESSION['username'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/dt-2.2.2/datatables.min.js" integrity="sha384-WcZXtPeSp12Ybwm08R/IL8F3bMhrj0WW6jKsqKXTqJSwCSkISe4unYVY8Vzc1RZc" crossorigin="anonymous"></script>
     <script src="js/toastr.min.js"></script>
-    <script src="js/stock_multi.js?v=20260930-6"></script>
+    <script>window.LTC_TRADE_SHOW_MULTIPLE_OFFERS = <?php echo $ltcShowMultipleOffers ? 'true' : 'false'; ?>;</script>
+    <script src="js/stock_multi.js?v=20261004-1"></script>
     <style>
       .offer-actions { display:inline-flex; gap:.35rem; align-items:center; }
       .offer-qty { width:3.3rem; min-width:3.3rem; padding:.2rem; text-align:center; }

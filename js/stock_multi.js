@@ -439,6 +439,12 @@ $(document).ready(function () {
               return parseFloat(a.UnitTrade) - parseFloat(b.UnitTrade);
             });
 
+            // Feature switch: false shows only the cheapest supplier offer per EAN.
+            // true keeps the multi-offer display, cheapest first.
+            if (window.LTC_TRADE_SHOW_MULTIPLE_OFFERS !== true) {
+              list = list.slice(0, 1);
+            }
+
             var earliest = list.reduce(function (min, o) {
               return (!min || o.DeliveryDate < min) ? o.DeliveryDate : min;
             }, null);
@@ -459,7 +465,7 @@ $(document).ready(function () {
               }
 
               html += "<td class='trade-price'>£" + escapeHtml(offer.UnitTrade) + "</td>";
-              html += "<td class='delivery-cell'><span class='delivery-label" + (/^(today|tomorrow)$/i.test(String(offer.DeliveryLabel || "").trim()) ? "" : " delivery-later") + "'>" + escapeHtml(offer.DeliveryLabel) + "</span>";
+              html += "<td class='delivery-cell'><span class='delivery-label'>" + escapeHtml(offer.DeliveryLabel) + "</span>";
               if (offer.DeliveryDate === earliest && list.some(function (x) { return x.DeliveryDate !== earliest; })) {
                 html += " <span class='badge text-bg-success'>Earliest</span>";
               }
