@@ -2,3 +2,4 @@
 .env.local
 trade.zip
 *.live-backup
+functions/db.php.*

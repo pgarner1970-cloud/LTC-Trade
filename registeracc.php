@@ -63,7 +63,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Passwords do not match.';
     } else {
         try {
-            $stmt = $pdo->prepare("SELECT 1 FROM tblusers WHERE username = ? OR email = ? LIMIT 1");
+            $stmt = $pdo->prepare("
+                SELECT 1
+                FROM tblusers
+                WHERE username = ?
+                   OR (usertype = 'T' AND email = ?)
+                LIMIT 1
+            ");
             $stmt->execute([$username, $email]);
             if ($stmt->fetchColumn()) {
                 $error = 'An account already exists using that username or email address.';
