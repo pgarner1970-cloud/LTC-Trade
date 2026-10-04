@@ -1,0 +1,17 @@
+
+:root{--ltc-blue:#0965d9;--ltc-dark:#12304f;--ltc-border:#dce4ee;--ltc-bg:#f4f7fb;--ltc-danger:#b42318;--ltc-success:#157347}
+*{box-sizing:border-box}body.auth-page{margin:0;background:var(--ltc-bg);color:#172b45;font-family:Arial,Helvetica,sans-serif}
+.auth-shell{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px 16px}
+.auth-wrap{width:100%;max-width:620px}.auth-logo{display:block;width:min(420px,86%);height:auto;margin:0 auto 22px}
+.auth-card{background:#fff;border:1px solid var(--ltc-border);border-radius:14px;box-shadow:0 10px 30px rgba(24,48,78,.08);overflow:hidden}
+.auth-head{background:var(--ltc-blue);color:#fff;padding:18px 22px}.auth-head h1{font-size:1.45rem;margin:0}.auth-head p{margin:5px 0 0;opacity:.92}
+.auth-body{padding:24px}.auth-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.auth-full{grid-column:1/-1}
+.auth-field label{display:block;font-weight:700;margin:0 0 6px}.auth-field input{width:100%;min-height:44px;border:1px solid #bdc9d8;border-radius:7px;padding:10px 12px;font-size:16px}
+.auth-field input:focus{outline:3px solid rgba(9,101,217,.15);border-color:var(--ltc-blue)}
+.auth-help{font-size:.85rem;color:#66758a;margin-top:5px}.auth-error{background:#fff0ef;color:#8f1d14;border:1px solid #f4b8b3;border-radius:7px;padding:11px 13px;margin-bottom:16px}
+.auth-success{background:#edf9f1;color:#145c2c;border:1px solid #a9dbb8;border-radius:7px;padding:11px 13px;margin-bottom:16px}
+.auth-btn{display:inline-flex;justify-content:center;align-items:center;border:0;border-radius:7px;background:var(--ltc-blue);color:#fff;font-size:1rem;font-weight:700;padding:12px 18px;cursor:pointer;text-decoration:none}
+.auth-btn:hover{filter:brightness(.94);color:#fff}.auth-links{text-align:center;margin-top:18px;font-size:.94rem}.auth-links a{color:var(--ltc-blue)}
+.auth-password{position:relative}.auth-password input{padding-right:70px}.auth-show{position:absolute;right:8px;top:7px;border:0;background:transparent;color:var(--ltc-blue);font-weight:700;padding:7px;cursor:pointer}
+.auth-hp{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important}
+@media(max-width:600px){.auth-shell{align-items:flex-start;padding:18px 10px}.auth-logo{margin-bottom:14px}.auth-card{border-radius:10px}.auth-head{padding:15px 16px}.auth-body{padding:18px 16px}.auth-grid{grid-template-columns:1fr;gap:14px}.auth-full{grid-column:auto}.auth-btn{width:100%}}

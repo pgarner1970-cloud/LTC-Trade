@@ -1,119 +1,48 @@
 <?php
 require_once __DIR__ . '/functions/db.php';
+if (session_status() === PHP_SESSION_NONE) session_start();
+$error = '';
 
-if (session_status() === PHP_SESSION_NONE) {
-  session_start();
-}
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = trim((string)($_POST['username'] ?? ''));
+    $password = (string)($_POST['password'] ?? '');
 
-if (isset($_POST['username'], $_POST['password'])) {
-  $username = trim((string)$_POST['username']);
-  $password = (string)$_POST['password'];
-
-  try {
-    $stmt = $pdo->prepare("SELECT usertype, hash, otp_code FROM tblusers WHERE username = ? AND usertype = 'T' LIMIT 1");
-    $stmt->execute([$username]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$user || empty($user['hash']) || !password_verify($password, $user['hash'])) {
-      $error = "Invalid username or password entered.";
-    } elseif (!empty($user['otp_code'])) {
-      $error = "Please verify your email address before logging in. Check your inbox for the verification link/code.";
+    if ($username === '' || $password === '') {
+        $error = 'Enter your username and password.';
     } else {
-      // Login success
-      $_SESSION['username'] = $username;
-      $_SESSION['usertype'] = $user['usertype'];
-      header("Location: index.php");
-      exit;
+        try {
+            $stmt = $pdo->prepare("SELECT usertype, hash, otp_code, verification_token_hash FROM tblusers WHERE username = ? AND usertype = 'T' LIMIT 1");
+            $stmt->execute([$username]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$user || empty($user['hash']) || !password_verify($password, $user['hash'])) {
+                $error = 'Invalid username or password.';
+            } elseif (!empty($user['verification_token_hash']) || !empty($user['otp_code'])) {
+                $error = 'Please verify your email address before signing in.';
+            } else {
+                session_regenerate_id(true);
+                $_SESSION['username'] = $username;
+                $_SESSION['usertype'] = $user['usertype'];
+                header('Location: index.php');
+                exit;
+            }
+        } catch (Throwable $e) {
+            error_log('LTC login error: ' . $e->getMessage());
+            $error = 'Sign in is temporarily unavailable. Please try again later.';
+        }
     }
-  } catch (Throwable $e) {
-    $error = "Login failed. Please try again.";
-  }
 }
 ?>
-<html lang="en">
-
-<head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>LTC Trade - Login</title>
-
-    <!-- Bootstrap core CSS -->
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <!-- Custom styles for this template -->
-    <link href="css/simple-sidebar.css" rel="stylesheet">
-
-</head>
-
-<body>
-	<div class="container" style="margin-top: 5%;">
-        <div class="col-md-6 col-md-offset-3"><img src="ltc_logo_600w.png" width="540px"></div>
-		<div class="col-md-6 col-md-offset-3">
-			<div class="panel panel-primary">
-				<div class="panel-heading">Trade Login</div>
-				<div class="panel-body">
-
-				<!-- Login Form -->
-				<form role="form" method="post" action="login.php">
-
-				<!-- Username Field -->
-					<div class="row">
-						<div class="form-group col-xs-12">
-						<label for="username"><span class="text-danger" style="margin-right:5px;">*</span>Username:</label>
-							<div class="input-group">
-								<input class="form-control" id="username" type="text" name="username" placeholder="Username" required/>
-								<span class="input-group-btn">
-									<label class="btn btn-primary"><span class="glyphicon glyphicon-user" aria-hidden="true"></label>
-								</span>
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Content Field -->
-					<div class="row">
-						<div class="form-group col-xs-12">
-							<label for="password"><span class="text-danger" style="margin-right:5px;">*</span>Password:</label>
-							<div class="input-group">
-								<input class="form-control" id="password" type="password" name="password" placeholder="Password" required/>
-								<span class="input-group-btn">
-									<label class="btn btn-primary"><span class="glyphicon glyphicon-lock" aria-hidden="true"></label>
-								</span>
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Login Button -->
-					<div class="row">
-						<div class="form-group col-xs-4">
-							<button class="btn btn-primary" type="submit">Submit</button>
-						</div>
-					</div>
-					<?php
-						global $error;
-						if(!empty($error)) {
-							echo "<div class='alert alert-danger'>".$error."</div>";
-						}
-					?>
-				</form>
-				<!-- End of Login Form -->
-
-			</div>
-		</div>
-		Forgotten password? <a href="uforgotpass.php">Click here</a>
-		<div>Need to register for Trade access? <a href="registeracc.php">Click here</a></div>
-	</div>
-
-    <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-
-</body>
-
-</html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LTC Trade - Sign in</title><link rel="stylesheet" href="css/auth.css?v=20261004-1"></head>
+<body class="auth-page"><main class="auth-shell"><div class="auth-wrap"><img class="auth-logo" src="ltc_logo_600w.png" alt="LTC Tyres">
+<section class="auth-card"><div class="auth-head"><h1>Trade sign in</h1><p>Access LTC Trade stock and ordering.</p></div><div class="auth-body">
+<?php if ($error): ?><div class="auth-error" role="alert"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></div><?php endif; ?>
+<form method="post" action="login.php">
+<div class="auth-grid">
+<div class="auth-field auth-full"><label for="username">Username</label><input id="username" name="username" maxlength="50" required autocomplete="username"></div>
+<div class="auth-field auth-full"><label for="password">Password</label><div class="auth-password"><input id="password" type="password" name="password" maxlength="200" required autocomplete="current-password"><button class="auth-show" type="button" data-show-password="password">Show</button></div></div>
+<div class="auth-full"><button class="auth-btn" type="submit">Sign in</button></div>
+</div></form>
+<div class="auth-links"><a href="uforgotpass.php">Forgotten password?</a><br>Need Trade access? <a href="registeracc.php">Create an account</a></div>
+</div></section></div></main><script src="js/registeracc.js?v=20261004-1"></script></body></html>
